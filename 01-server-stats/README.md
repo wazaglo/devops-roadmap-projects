@@ -48,3 +48,5 @@ Disk Usage: 55%
 - How to use `top`, `free`, `df`, `ps` for system monitoring
 - How to extract system metrics using Bash
 - How to automate server reporting using shell scripting
+## Project URL
+https://roadmap.sh/projects/server-stats
