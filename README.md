@@ -123,3 +123,7 @@ https://github.com/wazaglo/devops-roadmap-projects
 This repository is continuously updated as new projects are completed throughout the DevOps roadmap journey.
 
 Last Updated: June 2026
+
+
+## Project URL
+https://roadmap.sh/projects/server-stats
