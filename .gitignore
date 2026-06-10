@@ -1,0 +1,23 @@
+# Linux
+*.log
+
+# Editors
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# Kubernetes
+kubeconfig
+
+# Secrets
+.env
+*.pem
+*.key
