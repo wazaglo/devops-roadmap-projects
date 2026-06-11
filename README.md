@@ -21,17 +21,6 @@ Rather than focusing only on theory, each project demonstrates the implementatio
 
 ---
 
-## Projects
-
-| #  | Project                                   | Description                                                                              | Status      |
-| -- | ----------------------------------------- | ---------------------------------------------------------------------------------------- | ----------- |
-| 01 | [Server Stats](./project-01-server-stats) | Bash script for analyzing CPU, memory, disk usage, and top resource-consuming processes. | ✅ Completed |
-| 02 | Coming Soon                               | Next roadmap project                                                                     | ⏳ Pending   |
-| 03 | Coming Soon                               | Next roadmap project                                                                     | ⏳ Pending   |
-| 04 | Coming Soon                               | Next roadmap project                                                                     | ⏳ Pending   |
-
----
-
 ## Roadmap Areas Covered
 
 ### Linux & System Administration

@@ -50,3 +50,7 @@ Disk Usage: 55%
 - How to automate server reporting using shell scripting
 ## Project URL
 https://roadmap.sh/projects/server-stats
+
+
+## Author 
+Wisdom Azaglo
