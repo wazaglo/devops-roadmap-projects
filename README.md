@@ -120,3 +120,5 @@ Project 01 URL https://roadmap.sh/projects/server-stats
 Project 02 URL https://roadmap.sh/projects/log-archive-tool
 
 Project 03 URL https://roadmap.sh/projects/nginx-log-analyser
+
+Project 04 URL https://roadmap.sh/projects/github-actions-deployment-workflow
