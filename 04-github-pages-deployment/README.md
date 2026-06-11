@@ -30,23 +30,24 @@ The goal of this project is to learn:
 ## Project Structure
 
 ```text
-gh-deployment-workflow/
+devops-roadmap-projects/
 │
-├── index.html
-├── README.md
+├── 04-github-pages-deployment/
+│   ├── index.html
+│   └── README.md
 │
 └── .github/
     └── workflows/
-        └── deploy.yml
+        └── deploy-04.yml
 ```
 
 ### File Descriptions
 
-| File       | Purpose                                            |
-| ---------- | -------------------------------------------------- |
-| index.html | Static website content                             |
-| README.md  | Project documentation                              |
-| deploy.yml | GitHub Actions workflow responsible for deployment |
+| File          | Purpose                                            |
+| ------------- | -------------------------------------------------- |
+| index.html    | Static website content                             |
+| README.md     | Project documentation                              |
+| deploy-04.yml | GitHub Actions workflow (located at repository root) |
 
 ---
 
@@ -59,7 +60,7 @@ The deployment process is fully automated.
 The GitHub Actions workflow is configured to run only when:
 
 * A push is made to the `main` branch
-* The `index.html` file is modified
+* Any file in the `04-github-pages-deployment/` directory is modified
 
 ```yaml
 on:
@@ -67,7 +68,7 @@ on:
     branches:
       - main
     paths:
-      - 'index.html'
+      - '04-github-pages-deployment/**'
 ```
 
 This prevents unnecessary deployments when other files such as the README are updated.

@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'index.html'
+      - '04-github-pages-deployment/**'
 
 permissions:
   contents: read
@@ -34,7 +34,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: 04-github-pages-deployment
 
       - name: Deploy to GitHub Pages
         id: deployment
