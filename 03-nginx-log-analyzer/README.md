@@ -17,7 +17,7 @@ A lightweight bash script that analyzes NGINX access logs and generates a summar
 ## Installation
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/wazaglo/devops-roadmap-projects
 cd 03-nginx-log-analyzer
 chmod +x nginx-log-analyzer.sh
 ```
