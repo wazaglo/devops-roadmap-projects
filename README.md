@@ -116,4 +116,7 @@ Last Updated: June 2026
 
 ## Project URL
 Project 01 URL https://roadmap.sh/projects/server-stats
+
 Project 02 URL https://roadmap.sh/projects/log-archive-tool
+
+Project 03 URL https://roadmap.sh/projects/nginx-log-analyser
