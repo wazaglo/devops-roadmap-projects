@@ -274,13 +274,13 @@ A successful deployment will display a green checkmark.
 Once deployment completes successfully, the website becomes available at:
 
 ```text
-https://<github-username>.github.io/gh-deployment-workflow/
+https://<github-username>.github.io/<name-of-repo/
 ```
 
 Example:
 
 ```text
-https://wazaglo.github.io/gh-deployment-workflow/
+https://wazaglo.github.io/devops-roadmap-projects/
 ```
 
 ---
