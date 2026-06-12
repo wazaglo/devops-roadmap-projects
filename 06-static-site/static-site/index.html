@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Roadmap - Static Site Project</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚀 DevOps Roadmap Project 06</h1>
+            <p class="subtitle">Static Site Served with Nginx on AWS EC2</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>About This Project</h2>
+            <p>This static site is deployed using Infrastructure as Code with <strong>Terraform</strong> on <strong>AWS EC2</strong>, running <strong>Debian 12</strong> with <strong>Nginx</strong> as the web server.</p>
+            <p>Deployment is automated using <strong>rsync</strong> via a simple <code>deploy.sh</code> script.</p>
+        </section>
+
+        <section class="card">
+            <h2>Technologies Used</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <span class="icon">☁️</span>
+                    <span>AWS EC2</span>
+                </div>
+                <div class="tech-item">
+                    <span class="icon">🏗️</span>
+                    <span>Terraform</span>
+                </div>
+                <div class="tech-item">
+                    <span class="icon">🐧</span>
+                    <span>Debian 12</span>
+                </div>
+                <div class="tech-item">
+                    <span class="icon">🌐</span>
+                    <span>Nginx</span>
+                </div>
+                <div class="tech-item">
+                    <span class="icon">🔑</span>
+                    <span>SSH Keys</span>
+                </div>
+                <div class="tech-item">
+                    <span class="icon">📦</span>
+                    <span>rsync</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Architecture</h2>
+            <pre class="architecture">
+Terraform
+    │
+    ▼
+AWS EC2 (Debian 12)
+    │
+    ├── Security Group
+    │     ├── TCP 22 (SSH)
+    │     └── TCP 80 (HTTP)
+    │
+    ├── AWS Key Pair
+    │
+    ├── User Data (cloud-init)
+    │     ├── apt update & install nginx
+    │     ├── Configure nginx
+    │     └── Start nginx service
+    │
+    └── Static Site (rsync deploy)
+          ├── index.html
+          ├── style.css
+          └── images/
+            </pre>
+        </section>
+
+        <section class="card">
+            <h2>Deployment</h2>
+            <p>After Terraform provisions the infrastructure, deploy your changes with:</p>
+            <pre class="command">./deploy.sh</pre>
+            <p class="note">This uses <code>rsync</code> to sync the local <code>static-site/</code> directory to <code>/var/www/html/</code> on the server.</p>
+        </section>
+
+        <section class="card">
+            <h2>Image Gallery</h2>
+            <div class="gallery">
+                <figure>
+                    <img src="images/terraform-logo.svg" alt="Terraform Logo" onerror="this.style.display='none'">
+                    <figcaption>Infrastructure as Code</figcaption>
+                </figure>
+                <figure>
+                    <img src="images/nginx-logo.svg" alt="Nginx Logo" onerror="this.style.display='none'">
+                    <figcaption>Web Server</figcaption>
+                </figure>
+                <figure>
+                    <img src="images/aws-logo.svg" alt="AWS Logo" onerror="this.style.display='none'">
+                    <figcaption>Cloud Provider</figcaption>
+                </figure>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>Built as part of the <a href="https://roadmap.sh/devops" target="_blank">DevOps Roadmap</a></p>
+            <p class="credit">Project 06: Static Site with Nginx • Provisioned with Terraform • Deployed with rsync</p>
+        </div>
+    </footer>
+</body>
+</html>

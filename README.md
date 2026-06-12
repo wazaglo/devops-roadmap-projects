@@ -112,3 +112,5 @@ Project 03 URL https://roadmap.sh/projects/nginx-log-analyser
 Project 04 URL https://roadmap.sh/projects/github-actions-deployment-workflow
 
 Project 05 URL https://roadmap.sh/projects/ssh-remote-server-setup
+
+Project 06 URL https://roadmap.sh/projects/static-site-server
