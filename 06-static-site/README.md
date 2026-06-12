@@ -72,7 +72,7 @@ key_name       = "devops-static-site-key"
 instance_name  = "devops-static-site-server"
 ```
 
-> **Security:** `terraform.tfvars` is gitignored to prevent leaking your public key.
+> **Security:** `terraform.tfvars` is gitignored to prevent leaking my public key.
 
 ### 2. Provision infrastructure
 
