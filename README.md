@@ -102,18 +102,6 @@ devops-roadmap-projects/
 
 ---
 
-## Progress
-
-## Project URL
-
-https://github.com/wazaglo/devops-roadmap-projects
-
-
-This repository is continuously updated as new projects are completed throughout the DevOps roadmap journey.
-
-Last Updated: June 2026
-
-
 ## Project URL
 Project 01 URL https://roadmap.sh/projects/server-stats
 
@@ -122,3 +110,5 @@ Project 02 URL https://roadmap.sh/projects/log-archive-tool
 Project 03 URL https://roadmap.sh/projects/nginx-log-analyser
 
 Project 04 URL https://roadmap.sh/projects/github-actions-deployment-workflow
+
+Project 05 URL https://roadmap.sh/projects/ssh-remote-server-setup
