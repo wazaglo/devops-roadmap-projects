@@ -1,0 +1,551 @@
+{
+  "dashboard": {
+    "uid": "loki-overview",
+    "title": "Loki - Log Management Overview",
+    "tags": ["loki", "logs", "docker"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "Total Log Rate (logs/sec)",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum(rate({job=~\".+\"}[$__interval]))",
+            "legendFormat": "logs/sec",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 100 },
+                { "color": "red", "value": 500 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Active Log Streams",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 6, "x": 6, "y": 0 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "count(count_over_time({job=~\".+\"}[$__interval])) or vector(0)",
+            "legendFormat": "streams",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 50 },
+                { "color": "red", "value": 200 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Error Log Rate (errors/sec)",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 6, "x": 12, "y": 0 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum(rate({job=~\".+\"} |~ \"(?i)error\" [$__interval]))",
+            "legendFormat": "errors/sec",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 10 },
+                { "color": "red", "value": 50 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Warning Log Rate (warns/sec)",
+        "type": "stat",
+        "gridPos": { "h": 6, "w": 6, "x": 18, "y": 0 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum(rate({job=~\".+\"} |~ \"(?i)warn\" [$__interval]))",
+            "legendFormat": "warns/sec",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 20 },
+                { "color": "red", "value": 100 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Log Volume by Service",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum by(service_name) (count_over_time({job=~\".+\"}[$__interval]))",
+            "legendFormat": "{{service_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "pointSize": 5,
+              "lineWidth": 2,
+              "showPoints": "auto",
+              "spanNulls": false
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "Error Rate by Service",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum by(service_name) (count_over_time({job=~\".+\"} |~ \"(?i)error\" [$__interval]))",
+            "legendFormat": "{{service_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "pointSize": 5,
+              "lineWidth": 2,
+              "showPoints": "auto",
+              "spanNulls": false
+            },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 10 },
+                { "color": "red", "value": 50 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "Warning Rate by Service",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum by(service_name) (count_over_time({job=~\".+\"} |~ \"(?i)warn\" [$__interval]))",
+            "legendFormat": "{{service_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "pointSize": 5,
+              "lineWidth": 2,
+              "showPoints": "auto",
+              "spanNulls": false
+            }
+          }
+        }
+      },
+      {
+        "id": 8,
+        "title": "Log Volume by Container",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum by(container_name) (count_over_time({job=~\".+\"}[$__interval]))",
+            "legendFormat": "{{container_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "pointSize": 5,
+              "lineWidth": 2,
+              "showPoints": "auto",
+              "spanNulls": false
+            }
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "Log Volume Heatmap",
+        "type": "heatmap",
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 22 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum by(service_name) (count_over_time({job=~\".+\"}[$__interval]))",
+            "legendFormat": "{{service_name}}",
+            "refId": "A",
+            "format": "heatmap"
+          }
+        ],
+        "options": {
+          "calculate": false,
+          "yAxis": {
+            "unit": "short"
+          },
+          "color": {
+            "mode": "scheme",
+            "scheme": "Oranges"
+          }
+        }
+      },
+      {
+        "id": 10,
+        "title": "Top 10 Log Sources",
+        "type": "table",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 30 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "topk(10, sum by(service_name, filename) (count_over_time({job=~\".+\"}[$__interval])))",
+            "legendFormat": "{{service_name}} - {{filename}}",
+            "refId": "A",
+            "instant": true
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "service_name" },
+              "properties": [{ "id": "displayName", "value": "Service" }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "filename" },
+              "properties": [{ "id": "displayName", "value": "Source" }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Value" },
+              "properties": [{ "id": "displayName", "value": "Log Count" }]
+            }
+          ]
+        },
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": { "Time": true },
+              "renameByName": { "service_name": "Service", "filename": "Source", "Value": "Log Count" }
+            }
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "title": "Error Log Sources",
+        "type": "table",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 30 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "topk(10, sum by(service_name, filename) (count_over_time({job=~\".+\"} |~ \"(?i)error\" [$__interval])))",
+            "legendFormat": "{{service_name}} - {{filename}}",
+            "refId": "A",
+            "instant": true
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "service_name" },
+              "properties": [{ "id": "displayName", "value": "Service" }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "filename" },
+              "properties": [{ "id": "displayName", "value": "Source" }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Value" },
+              "properties": [{ "id": "displayName", "value": "Error Count" }]
+            }
+          ]
+        },
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": { "Time": true },
+              "renameByName": { "service_name": "Service", "filename": "Source", "Value": "Error Count" }
+            }
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "title": "Recent Errors",
+        "type": "logs",
+        "gridPos": { "h": 10, "w": 24, "x": 0, "y": 38 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "{job=~\".+\"} |~ \"(?i)(error|exception|fatal|panic|fail)\"",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "showCommonLabels": false,
+          "wrapLogMessage": true,
+          "prettifyLogMessage": false,
+          "enableLogDetails": true,
+          "sortOrder": "Descending",
+          "dedupStrategy": "none"
+        }
+      },
+      {
+        "id": 13,
+        "title": "Nginx Access Logs",
+        "type": "logs",
+        "gridPos": { "h": 10, "w": 12, "x": 0, "y": 48 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "{service_name=\"nginx\"} |~ \".*HTTP.*\"",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "showCommonLabels": false,
+          "wrapLogMessage": true,
+          "prettifyLogMessage": false,
+          "enableLogDetails": true,
+          "sortOrder": "Descending",
+          "dedupStrategy": "none"
+        }
+      },
+      {
+        "id": 14,
+        "title": "PostgreSQL Logs",
+        "type": "logs",
+        "gridPos": { "h": 10, "w": 12, "x": 12, "y": 48 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "{service_name=\"postgres\"}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "showCommonLabels": false,
+          "wrapLogMessage": true,
+          "prettifyLogMessage": false,
+          "enableLogDetails": true,
+          "sortOrder": "Descending",
+          "dedupStrategy": "none"
+        }
+      },
+      {
+        "id": 15,
+        "title": "Log Volume by Compose Project",
+        "type": "piechart",
+        "gridPos": { "h": 8, "w": 8, "x": 0, "y": 58 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum by(compose_project) (count_over_time({job=~\".+\"}[$__interval]))",
+            "legendFormat": "{{compose_project}}",
+            "refId": "A",
+            "instant": true
+          }
+        ],
+        "options": {
+          "pieType": "donut",
+          "tooltip": { "mode": "single" }
+        }
+      },
+      {
+        "id": 16,
+        "title": "Log Level Distribution",
+        "type": "piechart",
+        "gridPos": { "h": 8, "w": 8, "x": 8, "y": 58 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum by(level) (count_over_time({job=~\".+\"} |~ \"(?i)(info|warn|error|debug|fatal)\" [$__interval]))",
+            "legendFormat": "{{level}}",
+            "refId": "A",
+            "instant": true
+          }
+        ],
+        "options": {
+          "pieType": "donut",
+          "tooltip": { "mode": "single" }
+        }
+      },
+      {
+        "id": 17,
+        "title": "Top Error Patterns",
+        "type": "table",
+        "gridPos": { "h": 8, "w": 8, "x": 16, "y": 58 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "topk(10, sum by(line) (count_over_time({job=~\".+\"} |~ \"(?i)(error|exception)\" | pattern \"{{.line}}\" [$__interval])))",
+            "legendFormat": "{{line}}",
+            "refId": "A",
+            "instant": true
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "line" },
+              "properties": [{ "id": "displayName", "value": "Error Pattern" }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "Value" },
+              "properties": [{ "id": "displayName", "value": "Count" }]
+            }
+          ]
+        },
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": { "Time": true },
+              "renameByName": { "line": "Error Pattern", "Value": "Count" }
+            }
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "title": "Loki Ingestion Rate",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 66 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "sum(rate({job=~\".+\"}[$__interval])) by (service_name)",
+            "legendFormat": "{{service_name}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "fillOpacity": 30,
+              "pointSize": 5,
+              "lineWidth": 2,
+              "showPoints": "auto",
+              "spanNulls": false
+            }
+          }
+        }
+      },
+      {
+        "id": 19,
+        "title": "Alloy Log Collection Status",
+        "type": "logs",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 66 },
+        "datasource": { "type": "loki", "uid": "P8E80F9AEF21F6940" },
+        "targets": [
+          {
+            "expr": "{service_name=\"alloy\"} |~ \"(?i)(error|warn|level=error)\"",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showTime": true,
+          "showLabels": true,
+          "showCommonLabels": false,
+          "wrapLogMessage": true,
+          "prettifyLogMessage": false,
+          "enableLogDetails": true,
+          "sortOrder": "Descending",
+          "dedupStrategy": "none"
+        }
+      }
+    ]
+  }
+}

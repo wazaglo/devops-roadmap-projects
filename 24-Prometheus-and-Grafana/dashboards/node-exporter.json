@@ -1,0 +1,267 @@
+{
+  "dashboard": {
+    "uid": "node-exporter",
+    "title": "Node Exporter - System Metrics",
+    "tags": ["node-exporter", "system"],
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "CPU Usage",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "100 - (avg by(instance) (rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 70 },
+                { "color": "red", "value": 85 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Memory Usage",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 70 },
+                { "color": "red", "value": 85 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Disk Usage",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "(1 - (node_filesystem_avail_bytes{mountpoint=\"/\",fstype!=\"tmpfs\"} / node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"tmpfs\"})) * 100",
+            "legendFormat": "{{instance}} {{mountpoint}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 75 },
+                { "color": "red", "value": 90 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Network Received",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "rate(node_network_receive_bytes_total{device!~\"lo|veth.*|docker.*|br-.*\"}[5m])",
+            "legendFormat": "{{device}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 10485760 },
+                { "color": "red", "value": 52428800 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "System Load Average",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "node_load1",
+            "legendFormat": "1m",
+            "refId": "A"
+          },
+          {
+            "expr": "node_load5",
+            "legendFormat": "5m",
+            "refId": "B"
+          },
+          {
+            "expr": "node_load15",
+            "legendFormat": "15m",
+            "refId": "C"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 4 },
+                { "color": "red", "value": 8 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "Filesystem I/O",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "rate(node_disk_read_bytes_total{device!~\"dm.*\"}[5m])",
+            "legendFormat": "{{device}} read",
+            "refId": "A"
+          },
+          {
+            "expr": "rate(node_disk_written_bytes_total{device!~\"dm.*\"}[5m])",
+            "legendFormat": "{{device}} write",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "Bps",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "color": "green", "value": null },
+                { "color": "yellow", "value": 52428800 },
+                { "color": "red", "value": 104857600 }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 7,
+        "title": "CPU Cores",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 24 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "count(node_cpu_seconds_total{mode=\"idle\"})",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Total Memory",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 24 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "node_memory_MemTotal_bytes",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes"
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "Total Disk Space",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 24 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "node_filesystem_size_bytes{mountpoint=\"/\",fstype!=\"tmpfs\"}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes"
+          }
+        }
+      },
+      {
+        "id": 10,
+        "title": "Uptime",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 24 },
+        "datasource": { "type": "prometheus", "uid": "PBFA97CFB590B2093" },
+        "targets": [
+          {
+            "expr": "time() - node_boot_time_seconds",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s"
+          }
+        }
+      }
+    ],
+    "schemaVersion": 39
+  },
+  "folderId": 0,
+  "overwrite": true
+}

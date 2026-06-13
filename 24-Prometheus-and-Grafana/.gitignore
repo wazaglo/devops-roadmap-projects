@@ -1,0 +1,13 @@
+*.log
+.env
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+kubeconfig
+*.pem
+*.key
