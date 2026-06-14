@@ -1,0 +1,12 @@
+[Unit]
+Description=Dummy Systemd Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /opt/dummy-systemd-service/dummy.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
