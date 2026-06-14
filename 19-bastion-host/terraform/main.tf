@@ -138,29 +138,6 @@ resource "aws_route_table_association" "private" {
 }
 
 # -----------------------------------------
-# SSH Key Pairs
-# -----------------------------------------
-resource "tls_private_key" "bastion" {
-  count = var.create_ssh_keys ? 1 : 0
-  algorithm = "ED25519"
-}
-
-resource "tls_private_key" "private" {
-  count = var.create_ssh_keys ? 1 : 0
-  algorithm = "ED25519"
-}
-
-resource "aws_key_pair" "bastion" {
-  key_name   = var.bastion_key_name
-  public_key = var.create_ssh_keys ? tls_private_key.bastion[0].public_key_openssh : var.existing_bastion_public_key
-}
-
-resource "aws_key_pair" "private" {
-  key_name   = var.private_key_name
-  public_key = var.create_ssh_keys ? tls_private_key.private[0].public_key_openssh : var.existing_private_public_key
-}
-
-# -----------------------------------------
 # Security Group - Bastion (Public)
 # -----------------------------------------
 resource "aws_security_group" "bastion" {
@@ -224,7 +201,7 @@ resource "aws_security_group" "private" {
 resource "aws_instance" "bastion" {
   ami                         = data.aws_ami.debian12.id
   instance_type               = var.instance_type
-  key_name                    = aws_key_pair.bastion.key_name
+  key_name                    = var.bastion_key_name
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.bastion.id]
   associate_public_ip_address = true
@@ -246,7 +223,7 @@ resource "aws_instance" "bastion" {
 resource "aws_instance" "private" {
   ami                    = data.aws_ami.debian12.id
   instance_type          = var.instance_type
-  key_name               = aws_key_pair.private.key_name
+  key_name               = var.private_key_name
   subnet_id              = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.private.id]
 
@@ -257,21 +234,4 @@ resource "aws_instance" "private" {
     Role        = "private"
     Environment = "lab"
   }
-}
-
-# -----------------------------------------
-# Output Private Keys (if generated)
-# -----------------------------------------
-resource "local_file" "bastion_private_key" {
-  count    = var.create_ssh_keys ? 1 : 0
-  content  = tls_private_key.bastion[0].private_key_pem
-  filename = "${path.module}/bastion_key"
-  file_permission = "0600"
-}
-
-resource "local_file" "private_private_key" {
-  count    = var.create_ssh_keys ? 1 : 0
-  content  = tls_private_key.private[0].private_key_pem
-  filename = "${path.module}/private_key"
-  file_permission = "0600"
 }

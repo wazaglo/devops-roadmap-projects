@@ -117,6 +117,10 @@ Project 06 URL https://roadmap.sh/projects/static-site-server
 
 Project 08 URL https://roadmap.sh/projects/simple-monitoring-dashboard
 
+Project 10 URL https://roadmap.sh/projects/basic-dockerfile
+
 Project 16 URL https://roadmap.sh/projects/dockerized-service-deployment
+
+Project 19 URL https://roadmap.sh/projects/bastion-host
 
 Project 24 URL https://roadmap.sh/projects/monitoring

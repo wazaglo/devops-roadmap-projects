@@ -40,12 +40,12 @@ output "private_private_ip" {
 
 output "bastion_ssh_command" {
   description = "SSH command to connect to bastion host"
-  value       = "ssh -i bastion_key ${var.admin_username}@${aws_instance.bastion.public_ip}"
+  value       = "ssh -i ~/.ssh/${var.bastion_key_name} ${var.admin_username}@${aws_instance.bastion.public_ip}"
 }
 
 output "private_ssh_command_via_bastion" {
   description = "SSH command to connect to private server via bastion (ProxyJump)"
-  value       = "ssh -i private_key -J ${var.admin_username}@${aws_instance.bastion.public_ip} ${var.admin_username}@${aws_instance.private.private_ip}"
+  value       = "ssh -i ~/.ssh/${var.private_key_name} -J ${var.admin_username}@${aws_instance.bastion.public_ip} ${var.admin_username}@${aws_instance.private.private_ip}"
 }
 
 output "ssh_config" {
@@ -54,7 +54,7 @@ output "ssh_config" {
     Host bastion
         HostName ${aws_instance.bastion.public_ip}
         User ${var.admin_username}
-        IdentityFile ~/.ssh/bastion_key
+        IdentityFile ~/.ssh/${var.bastion_key_name}
         IdentitiesOnly yes
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
@@ -62,7 +62,7 @@ output "ssh_config" {
     Host private-server
         HostName ${aws_instance.private.private_ip}
         User ${var.admin_username}
-        IdentityFile ~/.ssh/private_key
+        IdentityFile ~/.ssh/${var.private_key_name}
         ProxyJump bastion
         IdentitiesOnly yes
         StrictHostKeyChecking no
@@ -70,19 +70,12 @@ output "ssh_config" {
     EOT
 }
 
-output "bastion_key_path" {
-  description = "Path to bastion private key (if generated)"
-  value       = var.create_ssh_keys ? "${path.module}/bastion_key" : "Use your existing key"
-}
-
-output "private_key_path" {
-  description = "Path to private server private key (if generated)"
-  value       = var.create_ssh_keys ? "${path.module}/private_key" : "Use your existing key"
-}
-
-output "bastion_mfa_setup_command" {
-  description = "Command to run on bastion to set up MFA for admin user (run after first login)"
-  value       = "google-authenticator -t -d -f -r 3 -R 30 -W"
+output "key_pair_names" {
+  description = "SSH key pair names (must exist in AWS before deploy)"
+  value = {
+    bastion = var.bastion_key_name
+    private = var.private_key_name
+  }
 }
 
 output "security_groups" {
@@ -93,10 +86,13 @@ output "security_groups" {
   }
 }
 
-output "key_pair_names" {
-  description = "SSH key pair names"
-  value = {
-    bastion = aws_key_pair.bastion.key_name
-    private = aws_key_pair.private.key_name
-  }
+output "admin_username" {
+  description = "Admin username for both instances"
+  value       = var.admin_username
+}
+
+output "admin_password" {
+  description = "Admin password (for private server password auth)"
+  value       = var.admin_password
+  sensitive   = true
 }

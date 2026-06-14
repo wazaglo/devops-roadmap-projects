@@ -41,13 +41,13 @@ variable "allowed_ssh_cidr" {
 }
 
 variable "bastion_key_name" {
-  description = "Name for bastion host SSH key pair"
+  description = "Name for bastion host SSH key pair (must exist in AWS)"
   type        = string
   default     = "bastion-host-key"
 }
 
 variable "private_key_name" {
-  description = "Name for private server SSH key pair"
+  description = "Name for private server SSH key pair (must exist in AWS)"
   type        = string
   default     = "private-server-key"
 }
@@ -58,26 +58,15 @@ variable "admin_username" {
   default     = "admin"
 }
 
+variable "admin_password" {
+  description = "Password for admin user (used on private server for password auth)"
+  type        = string
+  default     = "ChangeMe123!"
+  sensitive   = true
+}
+
 variable "enable_nat_gateway" {
   description = "Enable NAT Gateway for private subnet internet access (costs ~$45/month)"
   type        = bool
   default     = false
-}
-
-variable "create_ssh_keys" {
-  description = "Generate new SSH key pairs (true) or use existing (false)"
-  type        = bool
-  default     = true
-}
-
-variable "existing_bastion_public_key" {
-  description = "Existing public key for bastion (if create_ssh_keys = false)"
-  type        = string
-  default     = ""
-}
-
-variable "existing_private_public_key" {
-  description = "Existing public key for private server (if create_ssh_keys = false)"
-  type        = string
-  default     = ""
 }
