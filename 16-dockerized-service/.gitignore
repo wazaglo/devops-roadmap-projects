@@ -7,3 +7,4 @@ app/.env
 *.tfstate.*
 *.pem
 *.tfvars
+
