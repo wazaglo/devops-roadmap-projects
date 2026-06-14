@@ -1,0 +1,32 @@
+# Copy this file to terraform.tfvars and customize
+
+# AWS Region
+aws_region = "us-east-1"
+
+# VPC Configuration
+vpc_cidr            = "10.0.0.0/16"
+public_subnet_cidr  = "10.0.1.0/24"
+private_subnet_cidr = "10.0.2.0/24"
+availability_zone   = "us-east-1a"
+
+# Instance Configuration
+instance_type = "t3.micro"
+
+# SECURITY: Replace with YOUR public IP /32 (e.g., "203.0.113.42/32")
+# Get your IP: curl -s https://checkip.amazonaws.com
+allowed_ssh_cidr = "YOUR_PUBLIC_IP/32"
+
+# Bastion SSH Key Pair Name (must exist in AWS EC2 before deployment)
+# Create in AWS Console: EC2 > Key Pairs > Create Key Pair
+bastion_key_name = "bastion-host-key"
+
+# Admin username for both instances
+admin_username = "admin"
+
+# Admin password for private server (password authentication)
+# CHANGE THIS to a strong password!
+admin_password = "ChangeMe123!"
+
+# Enable NAT Gateway for private subnet internet access (~$45/month)
+# Not needed for this deployment - private server accessed via bastion only
+enable_nat_gateway = false

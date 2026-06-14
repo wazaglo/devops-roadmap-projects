@@ -46,12 +46,6 @@ variable "bastion_key_name" {
   default     = "bastion-host-key"
 }
 
-variable "private_key_name" {
-  description = "Name for private server SSH key pair (must exist in AWS)"
-  type        = string
-  default     = "private-server-key"
-}
-
 variable "admin_username" {
   description = "Admin username for both instances"
   type        = string

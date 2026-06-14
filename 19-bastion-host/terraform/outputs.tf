@@ -40,12 +40,12 @@ output "private_private_ip" {
 
 output "bastion_ssh_command" {
   description = "SSH command to connect to bastion host"
-  value       = "ssh -i ~/.ssh/${var.bastion_key_name} ${var.admin_username}@${aws_instance.bastion.public_ip}"
+  value       = "ssh -i ~/.ssh/${var.bastion_key_name}.pem ${var.admin_username}@${aws_instance.bastion.public_ip}"
 }
 
 output "private_ssh_command_via_bastion" {
-  description = "SSH command to connect to private server via bastion (ProxyJump)"
-  value       = "ssh -i ~/.ssh/${var.private_key_name} -J ${var.admin_username}@${aws_instance.bastion.public_ip} ${var.admin_username}@${aws_instance.private.private_ip}"
+  description = "SSH command to connect to private server via bastion (ProxyJump, password auth)"
+  value       = "ssh -J ${var.admin_username}@${aws_instance.bastion.public_ip} ${var.admin_username}@${aws_instance.private.private_ip}"
 }
 
 output "ssh_config" {
@@ -54,7 +54,7 @@ output "ssh_config" {
     Host bastion
         HostName ${aws_instance.bastion.public_ip}
         User ${var.admin_username}
-        IdentityFile ~/.ssh/${var.bastion_key_name}
+        IdentityFile ~/.ssh/${var.bastion_key_name}.pem
         IdentitiesOnly yes
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
@@ -62,20 +62,15 @@ output "ssh_config" {
     Host private-server
         HostName ${aws_instance.private.private_ip}
         User ${var.admin_username}
-        IdentityFile ~/.ssh/${var.private_key_name}
         ProxyJump bastion
-        IdentitiesOnly yes
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
     EOT
 }
 
-output "key_pair_names" {
-  description = "SSH key pair names (must exist in AWS before deploy)"
-  value = {
-    bastion = var.bastion_key_name
-    private = var.private_key_name
-  }
+output "bastion_key_name" {
+  description = "Bastion host SSH key pair name (must exist in AWS)"
+  value       = var.bastion_key_name
 }
 
 output "security_groups" {

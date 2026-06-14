@@ -206,7 +206,9 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids      = [aws_security_group.bastion.id]
   associate_public_ip_address = true
 
-  user_data = filebase64("${path.module}/user_data_bastion.sh")
+  user_data = templatefile("${path.module}/user_data_bastion.sh", {
+    admin_username = var.admin_username
+  })
 
   tags = {
     Name        = "bastion-host"
@@ -223,11 +225,13 @@ resource "aws_instance" "bastion" {
 resource "aws_instance" "private" {
   ami                    = data.aws_ami.debian12.id
   instance_type          = var.instance_type
-  key_name               = var.private_key_name
   subnet_id              = aws_subnet.private.id
   vpc_security_group_ids = [aws_security_group.private.id]
 
-  user_data = filebase64("${path.module}/user_data_private.sh")
+  user_data = templatefile("${path.module}/user_data_private.sh", {
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+  })
 
   tags = {
     Name        = "private-server"
