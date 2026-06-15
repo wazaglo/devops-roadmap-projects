@@ -176,26 +176,11 @@ curl http://localhost:3000/todos
 
 ### `api/models/Todo.js` — The Database Schema
 
-```javascript
-const todoSchema = new mongoose.Schema({
-  title: { type: String, required: true },   // Every todo MUST have a title
-  completed: { type: Boolean, default: false }, // Default: not completed
-}, { timestamps: true }); // Automatically adds createdAt and updatedAt
-```
-
-This is like creating a form template. It tells MongoDB: "Every todo document must have a `title` (text) and optionally a `completed` flag. Also, auto-track when it's created and updated."
+Defines the shape of a todo document in MongoDB. Each todo has a required `title` (text) and an optional `completed` flag (defaults to false). Mongoose automatically adds `createdAt` and `updatedAt` timestamps.
 
 ### `api/routes/todos.js` — The 5 Endpoints
 
-| Endpoint | What it does | Mongoose method used |
-|----------|-------------|---------------------|
-| `GET /todos` | Fetch all todos from MongoDB | `Todo.find()` |
-| `POST /todos` | Create a new todo | `Todo.create()` |
-| `GET /todos/:id` | Find one todo by its ID | `Todo.findById()` |
-| `PUT /todos/:id` | Find and update fields | `Todo.findByIdAndUpdate()` |
-| `DELETE /todos/:id` | Find and delete | `Todo.findByIdAndDelete()` |
-
-Each handler is wrapped in `try/catch` — if anything goes wrong (bad ID, database down, etc.), it returns a 500 error with the message.
+Five route handlers that each map to a Mongoose database operation: fetch all, create one, find one by ID, update one by ID, and delete one by ID. Each handler is wrapped in `try/catch` — if anything goes wrong (bad ID, database down, etc.), it returns a 500 error with the message.
 
 ### `api/server.js` — The Entry Point
 
@@ -209,52 +194,17 @@ The `MONGO_URI` defaults to `mongodb://mongo:27017/todos` — notice the hostnam
 
 ### `Dockerfile` — Building the API Image
 
-```dockerfile
-FROM node:20-alpine          # Start with a lightweight Node.js base (~120MB)
-WORKDIR /app                 # All commands run from /app inside the container
-COPY api/package*.json ./    # Copy only package.json first (caching optimization)
-RUN npm install              # Install dependencies
-COPY api/ .                  # Copy the rest of the source code
-EXPOSE 3000                  # Document that this image uses port 3000
-CMD ["npm", "run", "dev"]    # Start with nodemon for hot-reload
-```
-
-**Why copy package.json separately?** Docker builds images in layers. If `package.json` hasn't changed, Docker reuses the cached `npm install` layer instead of re-installing everything. This makes rebuilds much faster.
+Uses `node:20-alpine` as a lightweight base. First copies only `package.json` to install dependencies (a caching optimization — Docker reuses this layer unless dependencies change), then copies the rest of the source code. The container starts with nodemon for hot-reload during development.
 
 ### `docker-compose.yml` — The Conductor
 
-```yaml
-services:
-  api:                        # First container
-    build: .                  # Build from the Dockerfile in this directory
-    ports:
-      - "3000:3000"           # Map port 3000 on your machine → port 3000 in the container
-    volumes:
-      - ./api:/app            # Mount local code into container (hot-reload works!)
-      - /app/node_modules     # Keep container's node_modules separate from your machine
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/todos  # Connect to the "mongo" service
-      - PORT=3000
-    depends_on:
-      - mongo                 # Wait for MongoDB to start first
+Defines two services:
 
-  mongo:                      # Second container
-    image: mongo:7            # Use the official MongoDB 7 image from Docker Hub
-    volumes:
-      - mongo-data:/data/db   # Persist database files in a named volume
-    ports:
-      - "27017:27017"         # Expose MongoDB port (optional — API connects internally)
+- **api** — built from the local Dockerfile, exposed on port 3000. Your local `api/` folder is mounted into the container so code changes take effect immediately (hot-reload). It receives the MongoDB connection string and port as environment variables. The `depends_on` directive ensures MongoDB starts before the API attempts to connect.
 
-volumes:
-  mongo-data:                 # Declare the named volume
-```
+- **mongo** — uses the official MongoDB 7 image. Its data directory is mounted to a named Docker volume called `mongo-data`, which keeps the database files alive even when containers are stopped.
 
-### The Volume Mount Trick
-
-The line `volumes: - /app/node_modules` is important. When you mount `./api` (your local folder) over `/app` (the container's working directory), it would normally **hide** the `node_modules` folder that was installed during `docker build`. By adding `/app/node_modules` as a separate "anonymous volume," we tell Docker: "Use the container's own `node_modules`, not the host's." This way:
-- Your local folder stays clean (no node_modules on your machine)
-- The container has the correct Linux-native dependencies
-- Hot-reload still works for all your source code
+A subtle detail: the `api` service mounts `./api:/app` for live code syncing, but excludes `/app/node_modules` from the mount. This keeps the container's own Linux-native dependencies intact while still reflecting your source code changes.
 
 ## What You Learn From This Project
 
