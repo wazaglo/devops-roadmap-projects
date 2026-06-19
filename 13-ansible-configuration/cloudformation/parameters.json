@@ -1,11 +1,11 @@
 [
   {
     "ParameterKey": "InstanceType",
-    "ParameterValue": "t2.micro"
+    "ParameterValue": "t3.micro"
   },
   {
     "ParameterKey": "KeyName",
-    "ParameterValue": "ansible-key"
+    "ParameterValue": "aws-key"
   },
   {
     "ParameterKey": "SSHLocation",

@@ -10,5 +10,5 @@
 - name: Add public key to ubuntu user's authorized_keys
   authorized_key:
     user: ubuntu
-    key: "{{ lookup('file', '~/.ssh/ansible-key.pub') }}"
+    key: "{{ lookup('file', '~/.ssh/aws-key.pub') }}"
     state: present
