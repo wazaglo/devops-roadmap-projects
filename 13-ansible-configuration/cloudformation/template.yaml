@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "EC2 instance for Ansible Configuration Management project"
+
+Parameters:
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.small
+      - t3.micro
+    ConstraintDescription: Must be a valid EC2 instance type
+
+  LatestAmiId:
+    Description: AMI for Ubuntu 22.04 LTS
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/canonical/ubuntu/server/jammy/stable/current/amd64/hvm/ebs-gp2/ami-id
+
+  KeyName:
+    Description: Name of an existing EC2 KeyPair for SSH access
+    Type: AWS::EC2::KeyPair::KeyName
+
+  SSHLocation:
+    Description: CIDR block allowed to connect via SSH
+    Type: String
+    Default: 0.0.0.0/0
+
+Resources:
+  ServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref SSHLocation
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !Ref LatestAmiId
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !Ref ServerSecurityGroup
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install -y python3
+      Tags:
+        - Key: Name
+          Value: ansible-managed-server
+
+Outputs:
+  PublicIP:
+    Description: Public IP address of the EC2 instance
+    Value: !GetAtt EC2Instance.PublicIp
+
+  PublicDns:
+    Description: Public DNS name of the EC2 instance
+    Value: !GetAtt EC2Instance.PublicDnsName
+
+  InstanceId:
+    Description: Instance ID
+    Value: !Ref EC2Instance

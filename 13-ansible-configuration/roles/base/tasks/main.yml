@@ -1,0 +1,40 @@
+---
+- name: Update apt cache and upgrade all packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 3600
+
+- name: Install required system utilities
+  apt:
+    name:
+      - curl
+      - wget
+      - htop
+      - git
+      - ufw
+      - fail2ban
+    state: present
+
+- name: Enable and start fail2ban
+  service:
+    name: fail2ban
+    state: started
+    enabled: yes
+
+- name: Allow SSH through ufw
+  ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+
+- name: Allow HTTP through ufw
+  ufw:
+    rule: allow
+    port: "80"
+    proto: tcp
+
+- name: Enable ufw
+  ufw:
+    state: enabled
+    policy: deny

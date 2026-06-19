@@ -1,0 +1,11 @@
+---
+- name: Copy static site tarball to server
+  copy:
+    src: static-site.tar.gz
+    dest: /tmp/static-site.tar.gz
+
+- name: Extract tarball to web root
+  unarchive:
+    src: /tmp/static-site.tar.gz
+    dest: /var/www/html/
+    remote_src: yes
