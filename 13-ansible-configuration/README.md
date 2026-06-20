@@ -519,19 +519,6 @@ sudo fail2ban-client status
 
 ---
 
-## Stretch Goal
-
-Modify `roles/app/tasks/main.yml` to pull from a GitHub repository instead:
-
-```yaml
-- name: clone repo
-  git:
-    repo: https://github.com/your-username/your-repo.git
-    dest: /var/www/html
-```
-
----
-
 ## Cleanup
 
 ```bash
