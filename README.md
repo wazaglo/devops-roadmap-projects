@@ -125,7 +125,7 @@ Project 11 URL https://roadmap.sh/projects/multi-container-service
 
 Project 13 URL https://roadmap.sh/projects/configuration-management
 
-Project 14 URL https://roadmap.sh/projects/iac-on-digitalocean
+Project 14 URL https://roadmap.sh/projects/iac-digitalocean
 
 Project 16 URL https://roadmap.sh/projects/dockerized-service-deployment
 
