@@ -1,0 +1,5 @@
+aws_region     = "us-east-1"
+instance_type  = "t3.micro"
+instance_name  = "nodejs-service-server"
+key_name       = "devops-nodejs-key"
+public_key     = "ssh-ed25519 AAAAC3... your-public-key-here"

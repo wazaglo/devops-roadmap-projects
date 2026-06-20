@@ -127,6 +127,8 @@ Project 13 URL https://roadmap.sh/projects/configuration-management
 
 Project 14 URL https://roadmap.sh/projects/iac-digitalocean
 
+Project 15 URL https://roadmap.sh/projects/nodejs-service-deployment
+
 Project 16 URL https://roadmap.sh/projects/dockerized-service-deployment
 
 Project 19 URL https://roadmap.sh/projects/bastion-host

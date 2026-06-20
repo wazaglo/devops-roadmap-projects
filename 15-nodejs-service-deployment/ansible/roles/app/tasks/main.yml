@@ -1,0 +1,64 @@
+---
+- name: Install required system packages
+  apt:
+    name:
+      - curl
+      - git
+    state: present
+
+- name: Add NodeSource GPG key
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key
+    state: present
+
+- name: Add NodeSource repository
+  apt_repository:
+    repo: "deb https://deb.nodesource.com/node_22.x nodistro main"
+    state: present
+    update_cache: yes
+
+- name: Install Node.js and npm
+  apt:
+    name: nodejs
+    state: present
+
+- name: Ensure /opt/node-app directory exists
+  file:
+    path: /opt/node-app
+    state: directory
+    mode: "0755"
+
+- name: Clone application repository
+  git:
+    repo: "https://github.com/wazaglo/devops-roadmap-projects.git"
+    dest: /opt/node-app/repo
+    version: main
+    force: yes
+
+- name: Copy application files to working directory
+  synchronize:
+    src: /opt/node-app/repo/15-nodejs-service-deployment/app/
+    dest: /opt/node-app/
+    owner: no
+    group: no
+  delegate_to: 127.0.0.1
+
+- name: Install npm dependencies
+  npm:
+    path: /opt/node-app
+    ci: yes
+    production: yes
+
+- name: Deploy systemd unit file
+  template:
+    src: node-app.service.j2
+    dest: /etc/systemd/system/node-app.service
+    mode: "0644"
+  notify: restart node-app
+
+- name: Enable and start node-app service
+  systemd:
+    name: node-app
+    enabled: yes
+    state: started
+    daemon_reload: yes

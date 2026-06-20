@@ -1,0 +1,39 @@
+name: Deploy Node.js Service (Project 15)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '15-nodejs-service-deployment/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ansible
+
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PROJECT15_SSH_PRIVATE_KEY }}" > ~/.ssh/aws-key.pem
+          chmod 600 ~/.ssh/aws-key.pem
+
+      - name: Create Inventory
+        run: |
+          cat > 15-nodejs-service-deployment/ansible/inventory.ini <<EOF
+          [webserver]
+          ${{ secrets.PROJECT15_EC2_HOST }} ansible_user=ubuntu
+          EOF
+
+      - name: Run Ansible Playbook
+        run: |
+          cd 15-nodejs-service-deployment/ansible
+          ansible-playbook node_service.yml --tags app
