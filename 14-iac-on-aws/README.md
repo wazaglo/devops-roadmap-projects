@@ -51,4 +51,4 @@ terraform destroy -auto-approve
 
 ## Project URL
 
-https://roadmap.sh/projects/iac-on-digitalocean
+https://roadmap.sh/projects/iac-digitalocean
