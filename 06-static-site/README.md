@@ -4,28 +4,7 @@ Project 06 of the [DevOps Roadmap](https://roadmap.sh/devops). Provision a remot
 
 ## Architecture
 
-```
-Terraform
-    │
-    ▼
-AWS EC2 (Debian 12)
-    │
-    ├── Security Group
-    │     ├── TCP 22 (SSH)
-    │     └── TCP 80 (HTTP)
-    │
-    ├── AWS Key Pair
-    │
-    ├── user_data.sh (cloud-init)
-    │     ├── apt-get install nginx + rsync
-    │     ├── Configure nginx for static site
-    │     └── Start nginx service
-    │
-    └── Static Site (rsync deploy)
-          ├── index.html
-          ├── style.css
-          └── images/
-```
+![Architecture](docs/architecture.png)
 
 ## Prerequisites
 

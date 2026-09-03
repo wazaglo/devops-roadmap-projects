@@ -42,19 +42,7 @@ Terraform provisions the following AWS resources:
 
 SSH access is configured using an ED25519 key pair.
 
-```text
-Terraform
-    │
-    ▼
-AWS EC2 (Debian 12)
-    │
-    ├── Security Group
-    │     └── TCP 22
-    │
-    ├── AWS Key Pair
-    │
-    └── OpenSSH Server
-```
+![Architecture](docs/architecture.png)
 
 ---
 

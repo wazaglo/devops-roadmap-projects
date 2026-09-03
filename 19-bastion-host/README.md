@@ -4,14 +4,7 @@ AWS bastion host as secure entry point to a private server. MFA (Google Authenti
 
 ## Architecture
 
-```text
-Internet → IGW → Public Subnet (10.0.1.0/24)
-                   └── Bastion Host (Public IP)
-                         SSH: Key + Password + TOTP (MFA)
-              Private Subnet (10.0.2.0/24)
-                   └── Private Server (No public IP, no SSH key)
-                         SSH: Password only (via bastion ProxyJump)
-```
+![Architecture](docs/architecture.png)
 
 **Bastion MFA Flow**: SSH Key → Password → TOTP (all required, fail at any = denied)
 

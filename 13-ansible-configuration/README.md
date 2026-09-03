@@ -18,39 +18,7 @@ Everything can be automated with `./deploy.sh` or done manually step by step.
 
 ## Architecture
 
-```
-                    ┌──────────────────────────────────────────────┐
-                    │           AWS CloudFormation                 │
-                    │  ┌──────────────────────────────────────┐    │
-                    │  │  template.yaml + parameters.json      │    │
-                    │  └──────┬───────────────────────────────┘    │
-                    │         │ creates                           │
-                    │  ┌──────▼───────────────────────────────┐    │
-                    │  │  EC2 Instance (Ubuntu 22.04)         │    │
-                    │  │  ├─ SecurityGroup (port 22, 80)      │    │
-                    │  │  ├─ KeyPair: aws-key                 │    │
-                    │  │  └─ UserData: installs python3       │    │
-                    │  └──────┬───────────────────────────────┘    │
-                    └─────────┼────────────────────────────────────┘
-                              │ Public IP
-                    ┌─────────▼────────────────────────────────────┐
-                    │        Ansible Control Node (your machine)    │
-                    │  ┌──────────────────────────────────────┐     │
-                    │  │  ansible.cfg                         │     │
-                    │  │  ├─ private_key_file = aws-key.pem   │     │
-                    │  │  ├─ remote_user = ubuntu             │     │
-                    │  │  └─ host_key_checking = False        │     │
-                    │  ├──────────────────────────────────────┤     │
-                    │  │  inventory.ini → 3.93.197.127        │     │
-                    │  ├──────────────────────────────────────┤     │
-                    │  │  setup.yml (Playbook)                 │     │
-                    │  │  ├─ base role   (system setup)       │     │
-                    │  │  ├─ nginx role  (web server)         │     │
-                    │  │  ├─ app role    (deploy site)        │     │
-                    │  │  └─ ssh role    (add SSH key)        │     │
-                    │  └──────────────────────────────────────┘     │
-                    └──────────────────────────────────────────────┘
-```
+![Architecture](docs/architecture.png)
 
 ---
 
