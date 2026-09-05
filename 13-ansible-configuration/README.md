@@ -9,8 +9,8 @@ Part of the [roadmap.sh DevOps projects](https://roadmap.sh/devops/projects).
 
 This project does two things in sequence:
 
-1. **CloudFormation** — Creates an EC2 instance (Ubuntu 22.04) on AWS with a security group allowing SSH and HTTP
-2. **Ansible** — Connects to that instance and configures it: installs Nginx, deploys a static website, hardens the system with UFW and fail2ban, and adds SSH keys
+1. **CloudFormation** - Creates an EC2 instance (Ubuntu 22.04) on AWS with a security group allowing SSH and HTTP
+2. **Ansible** - Connects to that instance and configures it: installs Nginx, deploys a static website, hardens the system with UFW and fail2ban, and adds SSH keys
 
 Everything can be automated with `./deploy.sh` or done manually step by step.
 
@@ -32,7 +32,7 @@ The project has two independent phases:
 - A **security group** with inbound rules for SSH (port 22) and HTTP (port 80)
 - An **EC2 instance** with Ubuntu 22.04, using a dynamic AMI lookup via AWS SSM Parameter Store
 - **UserData** that installs Python3 on boot (required by Ansible)
-- The instance is launched with a **key pair** — AWS injects the public key into `ubuntu`'s `authorized_keys`
+- The instance is launched with a **key pair**: AWS injects the public key into `ubuntu`'s `authorized_keys`
 
 CloudFormation outputs the instance's **Public IP** when creation finishes.
 
@@ -71,11 +71,11 @@ Key Pair: aws-key            aws-key.pem  (private, chmod 600)  ~/.ssh/authorize
 ### On the Ansible Control Node (Your Machine)
 You need two files:
 
-1. **`~/.ssh/aws-key.pem`** — The private key. This authenticates you to the server.
+1. **`~/.ssh/aws-key.pem`** - The private key. This authenticates you to the server.
    - **Must have permissions `600`** (`chmod 600 aws-key.pem`). SSH refuses keys with open permissions.
    - Referenced in `ansible.cfg` as `private_key_file`.
 
-2. **`~/.ssh/aws-key.pub`** — The public key (optional but useful).
+2. **`~/.ssh/aws-key.pub`** - The public key (optional but useful).
    - Not needed for SSH itself, but needed by the `ssh` role which uses the `authorized_key` module.
    - Generate it from the private key:
      ```bash
@@ -84,17 +84,17 @@ You need two files:
 
 ### On the Managed Node (EC2 Instance)
 - Starts with `aws-key`'s public key in `authorized_keys` (injected by AWS at launch)
-- After the `ssh` role runs, the public key from your control node is also added — this is useful if you want additional keys or to ensure access via a different key
+- After the `ssh` role runs, the public key from your control node is also added, this is useful if you want additional keys or to ensure access via a different key
 
 ### Why two places reference the key?
-- **`ansible.cfg`** — tells Ansible which **private key** to use when connecting over SSH
-- **`roles/ssh/tasks/main.yml`** — tells Ansible to add your **public key** to the server's authorized_keys (so you can SSH in with your private key even if the AWS key pair mechanism didn't work)
+- **`ansible.cfg`**: tells Ansible which **private key** to use when connecting over SSH
+- **`roles/ssh/tasks/main.yml`**: tells Ansible to add your **public key** to the server's authorized_keys (so you can SSH in with your private key even if the AWS key pair mechanism didn't work)
 
 ---
 
 ## Every File Explained
 
-### `cloudformation/template.yaml` — CloudFormation Infrastructure Template
+### `cloudformation/template.yaml`: CloudFormation Infrastructure Template
 
 ```
 AWSTemplateFormatVersion: "2010-09-09"
@@ -110,7 +110,7 @@ Description: "EC2 instance for Ansible Configuration Management project"
 | `KeyName` | EC2 KeyPair | Name of existing EC2 key pair | — |
 | `SSHLocation` | String | CIDR block allowed SSH access | `0.0.0.0/0` |
 
-The **`LatestAmiId`** uses `AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>` to fetch the latest AMI dynamically — no hardcoded AMI IDs that break across regions.
+The **`LatestAmiId`** uses `AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>` to fetch the latest AMI dynamically. NOhardcoded AMI IDs that break across regions.
 
 **Resources (what gets created):**
 
@@ -127,7 +127,7 @@ The **`LatestAmiId`** uses `AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>` to 
 | `PublicDns` | `!GetAtt EC2Instance.PublicDnsName` |
 | `InstanceId` | `!Ref EC2Instance` |
 
-### `cloudformation/parameters.json` — Stack Parameter Values
+### `cloudformation/parameters.json`: Stack Parameter Values
 
 Supplies concrete values matching the template parameters:
 
@@ -139,7 +139,7 @@ Supplies concrete values matching the template parameters:
 ]
 ```
 
-### `ansible.cfg` — Ansible Control Node Configuration
+### `ansible.cfg`: Ansible Control Node Configuration
 
 ```ini
 [defaults]
@@ -156,7 +156,7 @@ remote_user = ubuntu
 | `private_key_file = ...` | The SSH private key Ansible uses to authenticate |
 | `remote_user = ubuntu` | Default SSH user on managed nodes (can be overridden per-host in inventory) |
 
-### `inventory.ini` — Managed Node Inventory
+### `inventory.ini`: Managed Node Inventory
 
 ```ini
 [webserver]
@@ -166,7 +166,7 @@ remote_user = ubuntu
 - `[webserver]` is a **group name**. The playbook uses `hosts: webserver` to target this group.
 - `ansible_user=ubuntu` overrides the SSH user for this specific host (takes precedence over `remote_user` in `ansible.cfg`).
 
-### `setup.yml` — Ansible Playbook (Entry Point)
+### `setup.yml`: Ansible Playbook (Entry Point)
 
 ```yaml
 - hosts: webserver          # Target the 'webserver' group in inventory
@@ -178,10 +178,10 @@ remote_user = ubuntu
     - role: ssh             # tagged 'ssh'
 ```
 
-- **`become: yes`** — All tasks run with root privileges. Without this, `apt`, `service`, `ufw`, etc. would fail.
-- **Tags** — Allow running specific roles with `ansible-playbook setup.yml --tags "nginx"` or skipping with `--skip-tags "base"`.
+- **`become: yes`**: All tasks run with root privileges. Without this, `apt`, `service`, `ufw`, etc. would fail.
+- **Tags**: Allow running specific roles with `ansible-playbook setup.yml --tags "nginx"` or skipping with `--skip-tags "base"`.
 
-### `roles/base/tasks/main.yml` — System Hardening
+### `roles/base/tasks/main.yml`: System Hardening
 
 ```yaml
 - name: Update apt cache and upgrade all packages
@@ -205,7 +205,7 @@ remote_user = ubuntu
 
 Ansible **modules** used: `apt`, `service`, `ufw`.
 
-### `roles/nginx/` — Web Server
+### `roles/nginx/`: Web Server
 
 **`tasks/main.yml`:**
 ```yaml
@@ -245,9 +245,9 @@ server {
 }
 ```
 
-A basic Nginx server block. The `$uri` and `$uri/` are Nginx variables (not Jinja2 — they pass through since the template uses raw Nginx syntax).
+A basic Nginx server block. The `$uri` and `$uri/` are Nginx variables (not Jinja2, they pass through since the template uses raw Nginx syntax).
 
-### `roles/app/tasks/main.yml` — Deploy the Static Site
+### `roles/app/tasks/main.yml`: Deploy the Static Site
 
 ```yaml
 - name: Copy static site tarball to server
@@ -261,7 +261,7 @@ A basic Nginx server block. The `$uri` and `$uri/` are Nginx variables (not Jinj
 - The `unarchive` module with `remote_src: yes` means the source file is already on the remote server (copied in the previous step).
 - `static-site.tar.gz` contains `index.html` and any other site assets. After extraction, Nginx serves them from `/var/www/html/`.
 
-### `roles/ssh/tasks/main.yml` — Add SSH Access
+### `roles/ssh/tasks/main.yml`: Add SSH Access
 
 ```yaml
 - name: Ensure .ssh directory exists
@@ -275,9 +275,9 @@ A basic Nginx server block. The `$uri` and `$uri/` are Nginx variables (not Jinj
 
 - The `file` module ensures the `.ssh` directory exists with correct permissions.
 - The `authorized_key` module adds a public key to the user's `authorized_keys`.
-- **`lookup('file', '~/.ssh/aws-key.pub')`** — This is a **lookup plugin**. It reads a file from the **control node's local filesystem** (not the managed node). The tilde `~` expands to the home directory of the user running Ansible.
+- **`lookup('file', '~/.ssh/aws-key.pub')`**: This is a **lookup plugin**. It reads a file from the **control node's local filesystem** (not the managed node). The tilde `~` expands to the home directory of the user running Ansible.
 
-### `deploy.sh` — Automation Script
+### `deploy.sh`: Automation Script
 
 ```bash
 set -euo pipefail

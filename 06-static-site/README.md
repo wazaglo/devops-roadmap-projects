@@ -63,10 +63,10 @@ terraform apply
 
 Terraform provisions:
 
-- **EC2 instance** — Debian 12, t3.micro (free tier eligible)
-- **Security Group** — SSH (22) and HTTP (80) from 0.0.0.0/0
-- **Key Pair** — SSH access with your public key
-- **user_data** — Installs Nginx + rsync, configures virtual host, starts service
+- **EC2 instance**: Debian 12, t3.micro (free tier eligible)
+- **Security Group**: SSH (22) and HTTP (80) from 0.0.0.0/0
+- **Key Pair**: SSH access with your public key
+- **user_data**: Installs Nginx + rsync, configures virtual host, starts service
 
 ### 3. Get server IP
 

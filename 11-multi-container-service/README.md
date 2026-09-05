@@ -46,7 +46,7 @@ Your machine (port 3000)
 └──────────────────────────────────┘
 ```
 
-**Key insight:** Inside Docker Compose, containers talk to each other using the **service name** as the hostname. That's why the API connects to `mongodb://mongo:27017/todos` — `mongo` is the service name, not `localhost`.
+**Key insight:** Inside Docker Compose, containers talk to each other using the **service name** as the hostname. That's why the API connects to `mongodb://mongo:27017/todos` - `mongo` is the service name, not `localhost`.
 
 ---
 
@@ -174,15 +174,15 @@ curl http://localhost:3000/todos
 
 ## How Each File Works
 
-### `api/models/Todo.js` — The Database Schema
+### `api/models/Todo.js`: The Database Schema
 
 Defines the shape of a todo document in MongoDB. Each todo has a required `title` (text) and an optional `completed` flag (defaults to false). Mongoose automatically adds `createdAt` and `updatedAt` timestamps.
 
-### `api/routes/todos.js` — The 5 Endpoints
+### `api/routes/todos.js`: The 5 Endpoints
 
-Five route handlers that each map to a Mongoose database operation: fetch all, create one, find one by ID, update one by ID, and delete one by ID. Each handler is wrapped in `try/catch` — if anything goes wrong (bad ID, database down, etc.), it returns a 500 error with the message.
+Five route handlers that each map to a Mongoose database operation: fetch all, create one, find one by ID, update one by ID, and delete one by ID. Each handler is wrapped in `try/catch` - if anything goes wrong (bad ID, database down, etc.), it returns a 500 error with the message.
 
-### `api/server.js` — The Entry Point
+### `api/server.js`: The Entry Point
 
 1. Loads environment variables from `.env` (or defaults)
 2. Creates an Express app
@@ -190,19 +190,19 @@ Five route handlers that each map to a Mongoose database operation: fetch all, c
 4. Connects to MongoDB using `mongoose.connect(MONGO_URI)`
 5. Only starts the server **after** MongoDB confirms the connection
 
-The `MONGO_URI` defaults to `mongodb://mongo:27017/todos` — notice the hostname is `mongo`, not `localhost`. That's how Docker Compose networking works: each service name becomes a hostname that other containers can reach.
+The `MONGO_URI` defaults to `mongodb://mongo:27017/todos` - notice the hostname is `mongo`, not `localhost`. That's how Docker Compose networking works: each service name becomes a hostname that other containers can reach.
 
-### `Dockerfile` — Building the API Image
+### `Dockerfile`: Building the API Image
 
-Uses `node:20-alpine` as a lightweight base. First copies only `package.json` to install dependencies (a caching optimization — Docker reuses this layer unless dependencies change), then copies the rest of the source code. The container starts with nodemon for hot-reload during development.
+Uses `node:20-alpine` as a lightweight base. First copies only `package.json` to install dependencies (a caching optimization. Docker reuses this layer unless dependencies change), then copies the rest of the source code. The container starts with nodemon for hot-reload during development.
 
-### `docker-compose.yml` — The Conductor
+### `docker-compose.yml`: The Conductor
 
 Defines two services:
 
-- **api** — built from the local Dockerfile, exposed on port 3000. Your local `api/` folder is mounted into the container so code changes take effect immediately (hot-reload). It receives the MongoDB connection string and port as environment variables. The `depends_on` directive ensures MongoDB starts before the API attempts to connect.
+- **api**: built from the local Dockerfile, exposed on port 3000. Your local `api/` folder is mounted into the container so code changes take effect immediately (hot-reload). It receives the MongoDB connection string and port as environment variables. The `depends_on` directive ensures MongoDB starts before the API attempts to connect.
 
-- **mongo** — uses the official MongoDB 7 image. Its data directory is mounted to a named Docker volume called `mongo-data`, which keeps the database files alive even when containers are stopped.
+- **mongo**: uses the official MongoDB 7 image. Its data directory is mounted to a named Docker volume called `mongo-data`, which keeps the database files alive even when containers are stopped.
 
 A subtle detail: the `api` service mounts `./api:/app` for live code syncing, but excludes `/app/node_modules` from the mount. This keeps the container's own Linux-native dependencies intact while still reflecting your source code changes.
 

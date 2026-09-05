@@ -190,7 +190,7 @@ ansible-playbook node_service.yml --tags app
 | 9 | Deploy systemd unit | Renders `node-app.service.j2` to `/etc/systemd/system/node-app.service` |
 | 10 | Enable and start service | `systemctl daemon-reload`, `systemctl enable --now node-app` |
 
-All tasks are **idempotent** — running the playbook multiple times produces the same result. If nothing has changed, Ansible reports `ok` and skips.
+All tasks are **idempotent** - running the playbook multiple times produces the same result. If nothing has changed, Ansible reports `ok` and skips.
 
 ### Step 4: Verify
 
@@ -289,7 +289,7 @@ jobs:
           ansible-playbook node_service.yml --tags app
 ```
 
-**This is Option 1 from the project spec** — running `ansible-playbook` inside the GitHub Actions runner. The runner acts as the Ansible control node, exactly as your local machine did in Task #1.
+**This is Option 1 from the project spec** - running `ansible-playbook` inside the GitHub Actions runner. The runner acts as the Ansible control node, exactly as your local machine did in Task #1.
 
 ### Configure GitHub Secrets
 
@@ -320,7 +320,7 @@ This project demonstrates three core IaC principles:
 
 ### 1. Declarative Configuration
 
-Both Terraform and Ansible are **declarative** — you describe the desired state, and the tool figures out what to change:
+Both Terraform and Ansible are **declarative** - you describe the desired state, and the tool figures out what to change:
 
 - **Terraform:** "I want an EC2 instance with this AMI, this security group, and this key pair." Terraform compares the current state against your config and creates/updates/destroys resources to match.
 - **Ansible:** "I want Node.js installed, this repo cloned, these dependencies installed, this service running." Ansible checks each task and only makes changes if the current state doesn't match.
@@ -331,7 +331,7 @@ Running the same configuration multiple times produces the same result. If nothi
 
 ### 3. Automation
 
-The same Ansible playbook runs both locally (Task #1) and in CI/CD (Task #2). No changes needed — the playbook is the single source of truth for server configuration.
+The same Ansible playbook runs both locally (Task #1) and in CI/CD (Task #2). No changes needed, the playbook is the single source of truth for server configuration.
 
 ---
 

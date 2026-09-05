@@ -234,9 +234,9 @@ LOKI_BUCKET=your-unique-bucket-name
 ```
 
 **Security notes:**
-- The `.env` file is gitignored — never commit it
+- The `.env` file is gitignored, never commit it
 - For production, use strong passwords and rotate them regularly
-- The Terraform secret key is stored in plaintext in `terraform.tfstate` — protect this file
+- The Terraform secret key is stored in plaintext in `terraform.tfstate` - protect this file
 
 ### Step 3: Start the Stack
 
@@ -258,7 +258,7 @@ Check all containers are running:
 docker compose ps
 ```
 
-Expected output — all 9 containers should be `Up` or `healthy`:
+Expected output, all 9 containers should be `Up` or `healthy`:
 
 ```
 NAME               STATUS                    PORTS
@@ -280,7 +280,7 @@ curl http://localhost:3100/ready
 # Should return: ready
 ```
 
-Check Prometheus targets — all 4 should be `UP`:
+Check Prometheus targets, all 4 should be `UP`:
 
 ```bash
 curl -s http://localhost:9090/api/v1/targets | jq '.data.activeTargets[] | {job: .labels.job, health: .health}'
@@ -346,17 +346,17 @@ Docker Containers → Alloy (reads logs) → Loki (stores logs) → S3 (persists
 
 ### Alloy Pipeline (`alloy/config.alloy`)
 
-1. `discovery.docker` — discovers containers via the Docker socket
-2. `loki.source.docker` — reads logs from discovered containers
-3. `loki.write` — pushes logs to Loki at `http://loki:3100/loki/api/v1/push`
+1. `discovery.docker` - discovers containers via the Docker socket
+2. `loki.source.docker` - reads logs from discovered containers
+3. `loki.write` - pushes logs to Loki at `http://loki:3100/loki/api/v1/push`
 
 ### Automatic Labels
 
 Each log line gets these labels automatically:
-- `container_name` — Docker container name (e.g., `nginx`, `grafana`)
-- `compose_service` — Docker Compose service name
-- `compose_project` — Docker Compose project name
-- `service_name` — same as `container_name`
+- `container_name`. Docker container name (e.g., `nginx`, `grafana`)
+- `compose_service`. Docker Compose service name
+- `compose_project`. Docker Compose project name
+- `service_name` - same as `container_name`
 
 ### Querying Logs in Grafana
 
@@ -385,10 +385,10 @@ sum by(service_name) (rate({job=~".+"} |~ "(?i)error" [5m]))
 
 ### Why S3?
 
-- **Durability** — S3 provides 99.999999999% (11 9's) durability
-- **No local state** — logs survive container restarts and removals
-- **Scalability** — S3 handles any volume of log data
-- **Cost** — pay only for what you store
+- **Durability**: S3 provides 99.999999999% (11 9's) durability
+- **No local state**: logs survive container restarts and removals
+- **Scalability**: S3 handles any volume of log data
+- **Cost**: pay only for what you store
 
 ### How it works
 
@@ -643,7 +643,7 @@ sudo lsof -i :3000
 - Writing scoped IAM policies (access to only one bucket, nothing else)
 - Docker Compose networking with custom bridge networks
 - Persistent volume management for stateful services
-- Handling distroless container images (Loki) — no shell tools for healthchecks
+- Handling distroless container images (Loki). NOshell tools for healthchecks
 - Managing secrets with `.env` files and `.gitignore`
 
 ---

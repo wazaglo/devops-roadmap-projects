@@ -39,7 +39,7 @@ ssh bastion
 google-authenticator -t -d -f -r 3 -R 30 -W     # answer Yes to all prompts
 ```
 
-Edit `/etc/pam.d/sshd` — add before `@include` lines:
+Edit `/etc/pam.d/sshd` - add before `@include` lines:
 ```
 auth requisite pam_google_authenticator.so nullok
 ```

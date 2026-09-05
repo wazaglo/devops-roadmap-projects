@@ -223,8 +223,8 @@ The GitHub Actions workflow (`.github/workflows/16-deploy.yml`) runs on every pu
 | Build and push | `docker/build-push-action@v5` | Build Docker image from Dockerfile, push to `ghcr.io` |
 
 **Image tag strategy:**
-- `main` — always points to latest commit on main branch
-- `sha-abc1234` — immutable tag for each commit (roll back to any version)
+- `main` - always points to latest commit on main branch
+- `sha-abc1234` - immutable tag for each commit (roll back to any version)
 
 ### Job 2: Deploy
 
@@ -282,9 +282,9 @@ docker run -d \
 
 ### What's protected
 
-- **`.env` file** — excluded from Docker image via `.dockerignore`, excluded from git via `.gitignore`
-- **SSH private key** — stored as `PROJECT16_SSH_PRIVATE_KEY` GitHub secret, never in repo
-- **Secrets at runtime** — passed via `-e` flags from GitHub secrets, not baked into the image
+- **`.env` file**: excluded from Docker image via `.dockerignore`, excluded from git via `.gitignore`
+- **SSH private key**: stored as `PROJECT16_SSH_PRIVATE_KEY` GitHub secret, never in repo
+- **Secrets at runtime**: passed via `-e` flags from GitHub secrets, not baked into the image
 
 ---
 
