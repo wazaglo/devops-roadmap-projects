@@ -125,7 +125,7 @@ cd 15-nodejs-service-deployment/terraform
 
 # Create your variables file
 cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars — paste your public SSH key into the public_key field
+# Edit terraform.tfvars - paste your public SSH key into the public_key field
 
 terraform init
 terraform plan
@@ -138,7 +138,7 @@ terraform apply -auto-approve
 |---|---|---|
 | `aws_key_pair.devops_key` | Key Pair | Imports your SSH public key so AWS injects it into the instance |
 | `aws_security_group.nodejs_sg` | Security Group | Opens port 22 (SSH) and port 80 (HTTP) to the internet |
-| `aws_instance.nodejs_server` | EC2 Instance | Ubuntu 24.04 with 20GB gp3 SSD. On first boot, `user_data.sh` installs Python3 — required by Ansible |
+| `aws_instance.nodejs_server` | EC2 Instance | Ubuntu 24.04 with 20GB gp3 SSD. On first boot, `user_data.sh` installs Python3 - required by Ansible |
 
 After apply completes, get the public IP:
 

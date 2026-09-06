@@ -278,7 +278,7 @@ docker run -d \
 | Basic Auth | HTTP only | Use HTTPS to prevent credential sniffing |
 | Secrets | Passed via `-e` flags | Use Docker secrets or AWS Secrets Manager |
 | EC2 user | `ec2-user` (default) | Create a non-root user with limited privileges |
-| Docker socket | Not mounted | Keep it that way — mounting gives root access |
+| Docker socket | Not mounted | Keep it that way - mounting gives root access |
 
 ### What's protected
 
@@ -343,7 +343,7 @@ aws sts get-caller-identity
 # Common issue: SSH public key not set in terraform.tfvars
 # Solution: Copy the example and fill in your key
 cp terraform.tfvars.example terraform.tfvars
-# Edit terraform.tfvars — replace the public_key value
+# Edit terraform.tfvars - replace the public_key value
 ```
 
 ### GitHub Actions deploy job fails

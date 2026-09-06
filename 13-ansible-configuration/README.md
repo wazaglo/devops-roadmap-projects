@@ -107,7 +107,7 @@ Description: "EC2 instance for Ansible Configuration Management project"
 |-----------|------|-------------|---------|
 | `InstanceType` | String | EC2 instance type (restricted to whitelist) | `t2.micro` |
 | `LatestAmiId` | SSM Parameter | Latest Ubuntu 22.04 AMI via SSM | /aws/service/canonical/.../ami-id |
-| `KeyName` | EC2 KeyPair | Name of existing EC2 key pair | — |
+| `KeyName` | EC2 KeyPair | Name of existing EC2 key pair | - |
 | `SSHLocation` | String | CIDR block allowed SSH access | `0.0.0.0/0` |
 
 The **`LatestAmiId`** uses `AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>` to fetch the latest AMI dynamically. NOhardcoded AMI IDs that break across regions.
@@ -301,18 +301,18 @@ Each line automates one manual step (see below).
 
 | Concept | Explanation |
 |---------|-------------|
-| **Control Node** | Your machine — runs `ansible-playbook`, holds playbooks, roles, inventory, and private keys |
-| **Managed Node** | The target server (EC2). It only needs Python and SSH access. Ansible is **agentless** — no software is installed on managed nodes |
+| **Control Node** | Your machine - runs `ansible-playbook`, holds playbooks, roles, inventory, and private keys |
+| **Managed Node** | The target server (EC2). It only needs Python and SSH access. Ansible is **agentless** - no software is installed on managed nodes |
 | **Inventory** | A file listing managed nodes (IPs/hostnames) organized into groups like `[webserver]` |
 | **Playbook** | A YAML file defining which hosts to target and what to do (`setup.yml`) |
 | **Task** | A single action using an Ansible module (e.g., "Install nginx", "Copy a file") |
-| **Module** | A built-in tool: `apt`, `copy`, `template`, `service`, `ufw`, `authorized_key`, `file`, `unarchive`. Modules are **idempotent** — running them multiple times produces the same result |
+| **Module** | A built-in tool: `apt`, `copy`, `template`, `service`, `ufw`, `authorized_key`, `file`, `unarchive`. Modules are **idempotent** - running them multiple times produces the same result |
 | **Role** | A reusable bundle of tasks, handlers, templates, and files organized under `roles/role_name/` |
 | **Handler** | A task triggered by `notify`. Runs once at the end of the play. Used for things like "restart nginx after config change" |
 | **Template** | A Jinja2 file (`.j2`) that can contain variables. Rendered to the target server |
 | **Lookup Plugin** | Reads data from the control node's filesystem (`lookup('file', 'path')`) |
 | **`become: yes`** | Escalates privileges (sudo). Required for admin tasks like installing packages or managing services |
-| **Idempotency** | Running the same playbook multiple times produces the same result — tasks are skipped if the desired state is already met |
+| **Idempotency** | Running the same playbook multiple times produces the same result - tasks are skipped if the desired state is already met |
 
 ---
 
@@ -432,11 +432,11 @@ ansible-playbook setup.yml --skip-tags "base"
 | Error | Cause | Fix |
 |-------|-------|-----|
 | Stack rolls back: `"instance type is not eligible for Free Tier"` | Selected instance type not available in this account/region | Change `InstanceType` to `t3.micro` in `cloudformation/parameters.json` |
-| `UNPROTECTED PRIVATE KEY FILE` — permissions 0755 | Private key file has open permissions | `chmod 600 ~/.ssh/aws-key.pem` |
+| `UNPROTECTED PRIVATE KEY FILE` - permissions 0755 | Private key file has open permissions | `chmod 600 ~/.ssh/aws-key.pem` |
 | YAML error: `mapping values are not allowed` | Incorrect indentation in a YAML file | Ensure consistent 2-space indentation. `key:` must be at same level as `user:` |
 | `The 'file' lookup had an issue accessing the file '~/.ssh/aws-key.pub'` | Public key file doesn't exist on the control node | Generate it: `ssh-keygen -y -f ~/.ssh/aws-key.pem > ~/.ssh/aws-key.pub` |
-| `Permission denied (publickey)` | Key name mismatch — CloudFormation launches with key A but Ansible tries key B | Ensure `KeyName` in `parameters.json` matches the private key in `ansible.cfg` |
-| `Failed to connect via SSH` — timeout | Security group not allowing SSH, or wrong IP | Verify the security group has an inbound rule for port 22 |
+| `Permission denied (publickey)` | Key name mismatch - CloudFormation launches with key A but Ansible tries key B | Ensure `KeyName` in `parameters.json` matches the private key in `ansible.cfg` |
+| `Failed to connect via SSH` - timeout | Security group not allowing SSH, or wrong IP | Verify the security group has an inbound rule for port 22 |
 
 ---
 

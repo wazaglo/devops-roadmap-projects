@@ -101,7 +101,7 @@ Hello, Wisdom!
 
 | Instruction | Purpose |
 |-------------|---------|
-| `FROM alpine:latest` | Uses Alpine Linux as the base image — small (~5MB), secure, minimal |
+| `FROM alpine:latest` | Uses Alpine Linux as the base image - small (~5MB), secure, minimal |
 | `ARG NAME="Captain"` | Declares a build-time variable with a default value of "Captain" |
 | `RUN echo "Hello, ${NAME}!"` | Executes the echo command during image build, printing the greeting |
 

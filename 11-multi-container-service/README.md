@@ -73,7 +73,7 @@ docker compose version
 │   │   └── Todo.js             # Defines what a "todo" looks like in MongoDB
 │   ├── routes/
 │   │   └── todos.js            # All 5 API endpoint handlers
-│   ├── server.js               # Entry point — starts Express + connects to MongoDB
+│   ├── server.js               # Entry point - starts Express + connects to MongoDB
 │   └── package.json            # Lists dependencies (express, mongoose, dotenv, nodemon)
 │
 ├── Dockerfile                  # Instructions to build the API's Docker image
@@ -166,7 +166,7 @@ docker compose down
 # Start again
 docker compose up -d
 
-# Check — the todo is still there!
+# Check - the todo is still there!
 curl http://localhost:3000/todos
 ```
 

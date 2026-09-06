@@ -429,9 +429,9 @@ terraform destroy -var="bucket_name=your-bucket-name" -var="region=eu-west-1"
 
 | Panel | Type | Description |
 |-------|------|-------------|
-| CPU Usage | Timeseries | CPU utilization % per instance |
-| Memory Usage | Timeseries | RAM utilization % per instance |
-| Disk Usage | Timeseries | Disk utilization % per mount point |
+| CPU Usage | Timeseries | CPU usage % per instance |
+| Memory Usage | Timeseries | RAM usage % per instance |
+| Disk Usage | Timeseries | Disk usage % per mount point |
 | Network Traffic | Timeseries | Bytes in/out per interface |
 | System Load | Timeseries | Load average (1m, 5m, 15m) |
 | Filesystem I/O | Timeseries | Read/write bytes per mount |
@@ -636,7 +636,7 @@ sudo lsof -i :3000
 - Using the Grafana HTTP API to create dashboards and alerts programmatically
 - Setting up Loki for log aggregation with a single-binary config
 - Configuring Alloy for automatic Docker log collection via the Docker socket
-- Building comprehensive Loki dashboards with LogQL queries (19 panels)
+- Building Loki dashboards with LogQL queries (19 panels)
 - Creating Loki alert rules for error detection and log monitoring
 - Provisioning AWS S3 buckets and IAM users with Terraform
 - Configuring Loki to use S3 as a remote storage backend with env var expansion
